@@ -1,18 +1,12 @@
 // Appointment Booking System (very easy version)
 // Name: SYED MUHAMMAD HAAD     Reg No: 2026(S)-CS-112
 #include <iostream>
-using namespace std;
-
-// The 3 variables that store our data
-int totalSlots = 0;          // total appointment slots in a day
-int bookedSlots = 0;         // slots that are booked
-int fee = 0;                 // fee of one appointment (Rs)
-
-// Variables for the results of calculations
+using namespace std
+int totalSlots = 0;        
+int bookedSlots = 0;         
+int fee = 0;                 
 int freeSlots = 0;
 int income = 0;
-
-// Option 1: add data
 void addData()
 {
     cout << "Enter total slots: ";
@@ -23,16 +17,12 @@ void addData()
     cin >> fee;
     cout << "Data added!" << endl;
 }
-
-// Option 2: calculations
 void calculate()
 {
     freeSlots = totalSlots - bookedSlots;
     income = bookedSlots * fee;
     cout << "Calculation done!" << endl;
 }
-
-// Option 3: show results
 void showResults()
 {
     cout << "Free slots : " << freeSlots << endl;
@@ -42,8 +32,6 @@ void showResults()
 int main()
 {
     int choice;
-
-    // This loop never stops. Press Ctrl + C to stop the program.
     while (true)
     {
         cout << endl;

@@ -2,13 +2,8 @@
 // Name: SYED MUHAMMAD HAAD     Reg No: 2026(S)-CS-112
 #include <iostream>
 using namespace std;
-
-// Player position. The player P starts at row 1, column 1.
 int playerRow = 1;
 int playerCol = 1;
-
-// Draws the maze: 6 rows and 8 columns
-// # is the wall (boundary), . is the empty path, P is the player
 void drawMaze()
 {
     cout << endl << "   SNAKE BATTLE EDITION" << endl << endl;
@@ -67,8 +62,6 @@ int main()
             playerRow = playerRow + 1;      // go down and right
             playerCol = playerCol + 1;
         }
-
-        // Did the player reach the boundary (wall)?
         if (playerRow == 0 || playerRow == 5 || playerCol == 0 || playerCol == 7)
         {
             drawMaze();
