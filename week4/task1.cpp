@@ -15,5 +15,5 @@ int main()
 void calculateFuel(double distance)
 {
     double fuel = distance * 10;
-    cout << "Fuel needed: " << fuel << endl;
+    cout << "Fuel needed: " << fuel << endl;ñ
 }

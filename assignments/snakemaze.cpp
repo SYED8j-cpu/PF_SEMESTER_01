@@ -1,75 +1,166 @@
-// Snake Battle Edition - Maze movement 
+// Snake Battle Edition - Version 2 
 // Name: SYED MUHAMMAD HAAD     Reg No: 2026(S)-CS-112
 #include <iostream>
 using namespace std;
-int playerRow = 1;
-int playerCol = 1;
+const int ROWS = 15;
+const int COLS = 40;
+int playerRow = 11;
+int playerCol = 18;
+int enemy1Col = 1;          
+int enemy2Row = 1;       
+int enemy3Col = 36;        
+int hits = 0;
+void printHeader()
+{
+    cout << "************************************" << endl;
+    cout << "*       SNAKE BATTLE EDITION       *" << endl;
+    cout << "************************************" << endl;
+}
+
+void clearScreen()
+{
+    for (int i = 0; i < 30; i++)
+    {
+        cout << endl;
+    }
+}
+
+void waitForKey()
+{
+    char dummy;
+    cout << "Enter any key to continue.. (then press Enter) ";
+    cin >> dummy;
+}
+char getCell(int row, int col)
+{
+    if (row == 0 || row == ROWS - 1 || col == 0 || col == COLS - 1)
+    {
+        return '#';
+    }
+    int r = row - playerRow;       
+    int c = col - playerCol;
+    if (r >= 0 && r <= 2 && c >= 0 && c <= 2)
+    {
+        if (r == 0 && c == 1) return 'O';     
+        if (r == 1 && c == 0) return '/';     
+        if (r == 1 && c == 1) return '|';
+        if (r == 1 && c == 2) return '\\';
+        if (r == 2 && c == 0) return '/';      
+        if (r == 2 && c == 2) return '\\';
+    }
+    if (row == 4 && col >= enemy1Col && col <= enemy1Col + 2)
+    {
+        if (col == enemy1Col)     return '<';
+        if (col == enemy1Col + 1) return 'E';
+        return '>';
+    }
+    if (row == enemy2Row && col >= 18 && col <= 20)
+    {
+        if (col == 18) return '<';
+        if (col == 19) return 'V';
+        return '>';
+    }
+    if (row == 9 && col >= enemy3Col && col <= enemy3Col + 2)
+    {
+        if (col == enemy3Col)     return '<';
+        if (col == enemy3Col + 1) return 'X';
+        return '>';
+    }
+    return ' ';
+}
+
 void drawMaze()
 {
-    cout << endl << "   SNAKE BATTLE EDITION" << endl << endl;
+    clearScreen();
+    printHeader();
 
-    for (int row = 0; row < 6; row++)
+    for (int row = 0; row < ROWS; row++)
     {
-        for (int col = 0; col < 8; col++)
+        for (int col = 0; col < COLS; col++)
         {
-            if (row == playerRow && col == playerCol)
-            {
-                cout << "P ";
-            }
-            else if (row == 0 || row == 5 || col == 0 || col == 7)
-            {
-                cout << "# ";
-            }
-            else
-            {
-                cout << ". ";
-            }
+            cout << getCell(row, col);
         }
         cout << endl;
     }
-    cout << endl;
+    cout << "Hits: " << hits << endl;
+}
+void movePlayer(char key)
+{
+    if ((key == 'w' || key == 'W') && playerRow > 1)             
+    {
+        playerRow--;
+    }
+    else if ((key == 's' || key == 'S') && playerRow < ROWS - 4) 
+    {
+        playerRow++;
+    }
+    else if ((key == 'a' || key == 'A') && playerCol > 1)        
+    {
+        playerCol--;
+    }
+    else if ((key == 'd' || key == 'D') && playerCol < COLS - 4) 
+    {
+        playerCol++;
+    }
 }
 
+void moveEnemies()
+{
+    enemy1Col++;
+    if (enemy1Col > COLS - 4)
+    {
+        enemy1Col = 1;
+    }
+    enemy2Row++;
+    if (enemy2Row > ROWS - 2)
+    {
+        enemy2Row = 1;
+    }
+    enemy3Col--;
+    if (enemy3Col < 1)
+    {
+        enemy3Col = COLS - 4;
+    }
+}
+bool isHit(int enemyRow, int enemyCol)
+{
+    if (enemyCol <= playerCol + 2 && enemyCol + 2 >= playerCol &&
+        enemyRow >= playerRow && enemyRow <= playerRow + 2)
+    {
+        return true;
+    }
+    return false;
+}
+
+bool checkCollision()
+{
+    if (isHit(4, enemy1Col) || isHit(enemy2Row, 18) || isHit(9, enemy3Col))
+    {
+        return true;
+    }
+    return false;
+}
 int main()
 {
-    int choice;
+    char key = ' ';
 
-    while (true)
+    while (key != 'x' && key != 'X')
     {
         drawMaze();
-
-        cout << "1. Move horizontally" << endl;
-        cout << "2. Move vertically" << endl;
-        cout << "3. Move diagonally" << endl;
-        cout << "0. Exit" << endl;
-        cout << "Enter choice: ";
-        cin >> choice;
-
-        if (choice == 0)
+        cout << "W/A/S/D = move, X = exit. Your move: ";
+        cin >> key;
+        movePlayer(key);
+        moveEnemies();
+        if (checkCollision())
         {
-            break;                          // stop the game
-        }
-        else if (choice == 1)
-        {
-            playerCol = playerCol + 1;      // go right
-        }
-        else if (choice == 2)
-        {
-            playerRow = playerRow + 1;      // go down
-        }
-        else if (choice == 3)
-        {
-            playerRow = playerRow + 1;      // go down and right
-            playerCol = playerCol + 1;
-        }
-        if (playerRow == 0 || playerRow == 5 || playerCol == 0 || playerCol == 7)
-        {
+            hits++;
+            playerRow = 11;            
+            playerCol = 18;
             drawMaze();
-            cout << "Boundary reached! Back to start." << endl;
-            playerRow = 1;                  // go back to starting location
-            playerCol = 1;
+            cout << "Enemy hit you! Back to start." << endl;
+            waitForKey();
         }
     }
-
+    cout << "Game over. Total hits: " << hits << endl;
     return 0;
-}            
+}
